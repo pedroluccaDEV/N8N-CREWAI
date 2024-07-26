@@ -8,12 +8,12 @@
   "license": "MIT",
   "homepage": "",
   "author": {
-    "name": "",
-    "email": "teste@teste.com"
+    "name": "DamiaoArth",
+    "email": "arthurdamiaomendes@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/DamiaoArth/N8N-CrewAi.git"
   },
   "engines": {
     "node": ">=18.10"
