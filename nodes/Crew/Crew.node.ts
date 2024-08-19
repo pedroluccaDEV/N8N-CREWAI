@@ -127,6 +127,8 @@ export class Crew implements INodeType {
                 // Call the Python script with the absolute path
                 console.log(`Running Python script with command: python3 ${pythonScriptPath} --file ${filePath}`);
 
+
+                
                 try {
                     const { stdout, stderr } = await execPromise(`python3 ${pythonScriptPath} --file ${filePath}`);
                     if (stderr) {
