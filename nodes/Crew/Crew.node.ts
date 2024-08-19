@@ -133,7 +133,8 @@ export class Crew implements INodeType {
                         console.error(`Python script stderr: ${stderr}`);
                     }
                     console.log(`Python script stdout: ${stdout}`);
-                    item.json['myString3'] = stdout;
+                    // Store the response from the Python script in the item
+                    item.json['agentResponse'] = stdout;
                 } catch (execError) {
                     console.error(`Failed to execute Python script: ${execError.message}`);
                     throw execError;  // Re-throw to handle in outer catch
