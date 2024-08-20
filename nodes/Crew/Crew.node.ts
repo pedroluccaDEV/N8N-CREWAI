@@ -104,7 +104,7 @@ export class Crew implements INodeType {
                 // Define the path for the JSON file and Python script
                 const definitionsDir = path.join(__dirname, '..', '..', 'python', 'agent');
                 const filePath = path.join(definitionsDir, 'definitions.json');
-                const pythonScriptPath = '/home/est.arthurmendes/Música/N8N-CrewAi/python/agent/crewai_openai.py';
+                const pythonScriptPath = '/home/est.pedrolucca/Documentos/Testes/n8n-crewai/N8N-CrewAi/python/agent/crewai_openai.py';
 
                 // Ensure the directory exists
                 if (!fs.existsSync(definitionsDir)) {
@@ -127,8 +127,6 @@ export class Crew implements INodeType {
                 // Call the Python script with the absolute path
                 console.log(`Running Python script with command: python3 ${pythonScriptPath} --file ${filePath}`);
 
-
-                
                 try {
                     const { stdout, stderr } = await execPromise(`python3 ${pythonScriptPath} --file ${filePath}`);
                     if (stderr) {
