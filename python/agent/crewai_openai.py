@@ -10,8 +10,8 @@ from sklearn.metrics import classification_report
 import os
 
 # Defina sua API Key do OpenAI aqui
-#API_KEY = "YOUR_API_KEY"
-#FINE_TUNED_MODEL = "YOUR_OUTPUT_MODEL
+API_KEY = "YOUR_API_KEY"
+FINE_TUNED_MODEL = "YOUR_OUTPUT_MODEL"
 
 # Defina o caminho completo para o arquivo related.json
 related_json_path = '/home/est.pedrolucca/Documentos/Testes/n8n-crewai/N8N-CrewAi/python/agent/related.json'
