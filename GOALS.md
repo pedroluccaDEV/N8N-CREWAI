@@ -17,3 +17,8 @@ Arthur - 19/08/24
     - Arrumar o git para pull e push corretamente (não estou conseguindo arrumar a pasta python/agent)
     - 
     -
+Pedro - 20/08/24
+  Evolução:
+   - Indentifiquei o problema do pull e push do python: filtro de segurança do github, não permite o comit por conta da api key
+   - Problema do GITHUB: Provavelmente corrigido
+   - Trabalhando na dinamicidade do input
