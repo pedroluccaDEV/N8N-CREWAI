@@ -12,7 +12,7 @@ Aqui, adicionar e listar as metas diárias para saber se estamos evoluindo ou es
 - PESAR EM IDEIAS DE COMO COMPARTLHAR AS ALTERAÇÕES DENTRO DO WORKFLOW QUE NÃO SÃO INCULIDAS NO GIT
 
 
-k
+s
 Arthur - 19/08/24
   Evolução:
     - Arrumar o git para pull e push corretamente (não estou conseguindo arrumar a pasta python/agent)
@@ -24,6 +24,10 @@ Pedro - 20/08/24
    - Problema do GITHUB: Provavelmente corrigido
    - Tratamento dos dados do output usando o node edit fields
   AMANHA VOU COMEÇAR A FAZER A IDEIA DO CHAT
-  
-
+Pedro - 20/08/24
+  Evolução:
+ - Comecei a fazer o chat ( input do usuário vira task e agente responde ao input)
+ - Usando chat trigger funcionou
+ - Tem que ver isso ai cara 🚀: O chatInput depois de processado, é escrito no json e toda vez que o usuário faz uma nova entrada, o json é reescrito com a nova solicitação
+ 
 
