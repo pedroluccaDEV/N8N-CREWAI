@@ -28,4 +28,6 @@ Pedro - 20/08/24
   Evolução:
  - Comecei a fazer o chat ( input do usuário vira task e agente responde ao input)
  - Usando chat trigger funcionou
+ - Tem que ver isso ai cara 🚀: O chatInput depois de processado, é escrito no json e toda vez que o usuário faz uma nova entrada, o json é reescrito com a nova solicitação
+ 
 
