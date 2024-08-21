@@ -11,8 +11,6 @@ Aqui, adicionar e listar as metas diárias para saber se estamos evoluindo ou es
 - SEPARAR AS TAREFAS: Separar quem vai ficar com o chat e quem vai lidar com a ideia de json dinamico ou não utilização do json
 - PESAR EM IDEIAS DE COMO COMPARTLHAR AS ALTERAÇÕES DENTRO DO WORKFLOW QUE NÃO SÃO INCULIDAS NO GIT
 
-
-s
 Arthur - 19/08/24
   Evolução:
     - Arrumar o git para pull e push corretamente (não estou conseguindo arrumar a pasta python/agent)
