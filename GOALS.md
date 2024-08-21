@@ -24,3 +24,8 @@ Pedro - 20/08/24
    - Problema do GITHUB: Provavelmente corrigido
    - Tratamento dos dados do output usando o node edit fields
   AMANHA VOU COMEÇAR A FAZER A IDEIA DO CHAT
+Pedro - 20/08/24
+  Evolução:
+ - Comecei a fazer o chat ( input do usuário vira task e agente responde ao input)
+ - Usando chat trigger funcionou
+
