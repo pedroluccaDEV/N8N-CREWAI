@@ -10,7 +10,7 @@ from sklearn.metrics import classification_report
 import os
 
 # Defina sua API Key do OpenAI aqui
-API_KEY = "sk-proj-bv47Llihqv0wmXWVsJFcT3BlbkFJ95EnJbtCW7rRGS4t3VS2"
+API_KEY = "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"
 FINE_TUNED_MODEL = "ft:gpt-3.5-turbo-1106:startup:teste2-0:9qiFZG8o"
 
 # Defina o caminho completo para o arquivo related.json
@@ -59,19 +59,32 @@ def create_agents(agents_json, llm):
 
 # Função para processar uma tarefa e gerar uma resposta
 def process_task(task, llm):
+    if task is None:
+        return "Task is None."
+
+    if not hasattr(task, 'description'):
+        return "Task description is missing."
+
     user_prompt = task.description
+    print(f"Processing task with description: {user_prompt}")  # Adicione isso para depuração
+
     conversation_history = [{"role": "user", "content": user_prompt}]
     
     # Adicionar contexto da conversa ao prompt
     context_prompt = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
     response = get_response_from_model(context_prompt, llm)
-    conversation_history.append({"role": "agent", "content": response})
+    
+    if not response:
+        return "No response from model."
 
+    conversation_history.append({"role": "agent", "content": response})
     return response
 
 # Função para processar o prompt do usuário e responder com base no modelo
 def get_response_from_model(prompt, llm):
+    print(f"Prompt sent to model: {prompt}")  # Adicione isso para depuração
     response = llm.invoke(prompt)
+    print(f"Model response: {response}")  # Adicione isso para depuração
     if isinstance(response, dict):
         return response.get('content', '')
     elif hasattr(response, 'text'):
@@ -95,6 +108,9 @@ def main():
     else:
         raise ValueError("Either --json or --file must be provided.")
 
+    # Adicionar print para verificar definições carregadas
+    print("Loaded Definitions:", definitions)
+
     llm = ChatOpenAI(
         model=FINE_TUNED_MODEL,  
         api_key=API_KEY
@@ -102,6 +118,9 @@ def main():
 
     agents = create_agents(definitions["agents"], llm)
     tasks_data = definitions.get("tasks", [])
+
+    # Adicionar print para verificar tarefas carregadas
+    print("Loaded Tasks Data:", tasks_data)
 
     if not agents:
         print("Nenhum agente disponível para interação.")
@@ -114,14 +133,29 @@ def main():
 
     # Processar cada tarefa
     for task_data in tasks_data:
+        print(f"Processing task data: {task_data}")  # Adicione isso para depuração
+
+        if task_data is None:
+            print("Task data is None.")
+            continue
+
+        if not isinstance(task_data, dict):
+            print("Task data is not a dictionary.")
+            continue
+
+        if 'description' not in task_data:
+            print("Task description is missing.")
+            continue
+
         task = Task(
-            description=task_data["description"],
+            description=task_data.get("description", ""),
             expected_output=task_data.get("expected_output", ""),
             agent=agent
         )
+        
         # Adicionar a tarefa ao Crew
         crew.tasks.append(task)
-        print(f"Processing task: {task.description}")
+        print(f"Task added to crew: {task.description}")
 
         # Executar a tarefa
         try:
@@ -133,3 +167,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

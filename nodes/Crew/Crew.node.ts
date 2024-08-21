@@ -16,141 +16,137 @@ import * as path from 'path';
 
 const execPromise = promisify(exec);
 
-function getInputs() {
-    const inputs = [
-        { displayName: 'Input Main', type: NodeConnectionType.Main },
-        {
-            displayName: 'Agents',
-            type: NodeConnectionType.AiAgent,
-            required: true,
-        },
-        {
-            displayName: 'Tasks',
-            type: NodeConnectionType.AiTool,
-            required: true,
-        },
-    ];
-
-    return inputs;
-}
-
 export class Crew implements INodeType {
-
     description: INodeTypeDescription = {
         displayName: 'CrewAI Crew',
         name: 'crewAICrew',
         group: ['transform'],
         version: 1,
-        description: 'Configure and execute a CrewAI crew with autonomous agents, each tailored for specific roles and goals, directly within your n8n workflows. This node provides a structured approach to define agent configurations, facilitating sophisticated AI-driven task execution.',
+        description: 'Configure and execute a CrewAI crew with autonomous agents, each tailored for specific roles and goals, directly within your n8n workflows.',
         defaults: {
             name: 'CrewAI Crew',
         },
-        inputs: `={{ ((parameter) => { ${getInputs.toString()}; return getInputs(parameter) })($parameter) }}`,
+        inputs: [
+            { displayName: 'Input Main', type: 'main', required: true },
+            { displayName: 'Agents', type: 'ai_agent', required: true },
+            { displayName: 'Tasks', type: 'ai_tool', required: false }, // Set as optional
+        ],
         outputs: ['main'],
         properties: [
+            {
+                displayName: 'Chat Input',
+                name: 'chatInput',
+                type: 'string',
+                default: '',
+                description: 'Input text to be used as the task if no task node is connected.',
+            },
             {
                 displayName: 'Allow Delegation',
                 name: 'allowDelegation',
                 type: 'boolean',
                 default: false,
-                description: 'If true, the agent can delegate tasks to other agents when necessary.',
             },
             {
                 displayName: 'Execution Mode',
                 name: 'executionMode',
                 type: 'options',
                 options: [
-                    {
-                        name: 'Sequential',
-                        value: 'sequential',
-                        description: 'Executes tasks sequentially, one after the other.',
-                    },
-                    {
-                        name: 'Parallel',
-                        value: 'parallel',
-                        description: 'Executes tasks in parallel, based on dependencies and resources.',
-                    },
+                    { name: 'Sequential', value: 'sequential' },
+                    { name: 'Parallel', value: 'parallel' },
                 ],
                 default: 'sequential',
-                description: 'Choose the execution mode for CrewAI tasks. Sequential mode ensures tasks are handled one at a time, while Parallel mode enables simultaneous execution where applicable.',
             },
         ],
     };
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
         const items = this.getInputData();
+        const chatInput = this.getNodeParameter('chatInput', 0) as string;
 
-        let item: INodeExecutionData;
-        let myString: string;
+        if (!chatInput) {
+            throw new NodeOperationError(this.getNode(), 'Chat Input is required.');
+        }
 
-        const agents = (await this.getInputConnectionData(
-            NodeConnectionType.AiAgent,
-            0,
-        )) as CrewAIAgent[];
+        const agents = (await this.getInputConnectionData(NodeConnectionType.AiAgent, 0)) as CrewAIAgent[];
+        let tasks: CrewAITask[] | undefined;
 
-        const tasks = (await this.getInputConnectionData(
-            NodeConnectionType.AiTool,
-            0,
-        )) as CrewAITask[];
+        // Check if there's a connection to the task node
+        try {
+            tasks = (await this.getInputConnectionData(NodeConnectionType.AiTool, 0)) as CrewAITask[];
+        } catch (error) {
+            // No connection to tasks, use chatInput as the task
+            if (!chatInput) {
+                throw new NodeOperationError(this.getNode(), 'A Tasks sub-node must be connected or a chat input must be provided.');
+            }
+        }
+
+        // Log the loaded agents and tasks
+        console.log('Loaded Agents:', agents);
+        console.log('Loaded Tasks:', tasks);
 
         for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
             try {
-                myString = this.getNodeParameter('myString', itemIndex, '') as string;
-                item = items[itemIndex];
-                myString = myString;
+                const item = items[itemIndex];
+                // Use chat input if no tasks are defined
+                const task = (tasks && tasks.length > 0) ? tasks[0] : { name: 'Custom Task', description: chatInput }; 
 
-                console.log('running');
+                // Log the task being used
+                console.log('Task Being Used:', task);
+
+                if (!task) {
+                    throw new NodeOperationError(this.getNode(), 'Task is undefined.');
+                }
 
                 // Define the path for the JSON file and Python script
                 const definitionsDir = path.join(__dirname, '..', '..', 'python', 'agent');
                 const filePath = path.join(definitionsDir, 'definitions.json');
                 const pythonScriptPath = '/home/est.pedrolucca/Documentos/Testes/n8n-crewai/N8N-CrewAi/python/agent/crewai_openai.py';
 
-                // Ensure the directory exists
                 if (!fs.existsSync(definitionsDir)) {
                     fs.mkdirSync(definitionsDir, { recursive: true });
                 }
 
                 // Prepare JSON data
-                let jsonParams: any = {};
-                jsonParams.agents = agents;
-                jsonParams.tasks = tasks;
+                const jsonParams: any = { agents, tasks: [task] };
 
                 try {
                     fs.writeFileSync(filePath, JSON.stringify(jsonParams, null, 2));
                     console.log(`Successfully wrote definitions to: ${filePath}`);
                 } catch (writeError) {
-                    console.error(`Failed to write definitions.json: ${writeError.message}`);
-                    throw writeError;  // Re-throw to handle in outer catch
+                    throw new NodeOperationError(this.getNode(), `Failed to write definitions.json: ${writeError.message}`);
                 }
 
-                // Call the Python script with the absolute path
-                console.log(`Running Python script with command: python3 ${pythonScriptPath} --file ${filePath}`);
+                if (!fs.existsSync(pythonScriptPath)) {
+                    throw new NodeOperationError(this.getNode(), `Python script not found at path: ${pythonScriptPath}`);
+                }
 
+                // Execute Python script
                 try {
                     const { stdout, stderr } = await execPromise(`python3 ${pythonScriptPath} --file ${filePath}`);
                     if (stderr) {
                         console.error(`Python script stderr: ${stderr}`);
                     }
-                    console.log(`Python script stdout: ${stdout}`);
-                    // Store the response from the Python script in the item
-                    item.json['agentResponse'] = stdout;
+                    if (stdout && item && item.json) {
+                        item.json['agentResponse'] = stdout;
+
+                        // Check if task is of type { name: string; description: string }
+                        if ('name' in task && 'description' in task) {
+                            console.log(`Agent response for task '${task.name}': ${stdout}`);
+                        } else {
+                            console.log(`Agent response for task with description: ${task.description}`);
+                        }
+                    } else {
+                        throw new NodeOperationError(this.getNode(), 'Failed to retrieve a valid response from the Python script.');
+                    }
                 } catch (execError) {
-                    console.error(`Failed to execute Python script: ${execError.message}`);
-                    throw execError;  // Re-throw to handle in outer catch
+                    throw new NodeOperationError(this.getNode(), `Failed to execute Python script: ${execError.message}`);
                 }
 
             } catch (error) {
                 if (this.continueOnFail()) {
                     items.push({ json: this.getInputData(itemIndex)[0].json, error, pairedItem: itemIndex });
                 } else {
-                    if (error.context) {
-                        error.context.itemIndex = itemIndex;
-                        throw error;
-                    }
-                    throw new NodeOperationError(this.getNode(), error, {
-                        itemIndex,
-                    });
+                    throw new NodeOperationError(this.getNode(), error.message, { itemIndex });
                 }
             }
         }

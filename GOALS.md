@@ -8,10 +8,11 @@ Aqui, adicionar e listar as metas diárias para saber se estamos evoluindo ou es
 
 
 ## Plano de Teste/ Solução:
+- SEPARAR AS TAREFAS: Separar quem vai ficar com o chat e quem vai lidar com a ideia de json dinamico ou não utilização do json
+- PESAR EM IDEIAS DE COMO COMPARTLHAR AS ALTERAÇÕES DENTRO DO WORKFLOW QUE NÃO SÃO INCULIDAS NO GIT
 
 
-
-
+k
 Arthur - 19/08/24
   Evolução:
     - Arrumar o git para pull e push corretamente (não estou conseguindo arrumar a pasta python/agent)
@@ -21,4 +22,8 @@ Pedro - 20/08/24
   Evolução:
    - Indentifiquei o problema do pull e push do python: filtro de segurança do github, não permite o comit por conta da api key
    - Problema do GITHUB: Provavelmente corrigido
-   - Trabalhando na dinamicidade do input
+   - Tratamento dos dados do output usando o node edit fields
+  AMANHA VOU COMEÇAR A FAZER A IDEIA DO CHAT
+  
+
+
