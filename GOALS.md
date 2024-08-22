@@ -8,8 +8,18 @@ Aqui, adicionar e listar as metas diárias para saber se estamos evoluindo ou es
 
 
 ## Plano de Teste/ Solução:
-- SEPARAR AS TAREFAS: Separar quem vai ficar com o chat e quem vai lidar com a ideia de json dinamico ou não utilização do json
-- PESAR EM IDEIAS DE COMO COMPARTLHAR AS ALTERAÇÕES DENTRO DO WORKFLOW QUE NÃO SÃO INCULIDAS NO GIT
+  # GERAL:
+  - PESAR EM IDEIAS DE COMO COMPARTLHAR AS ALTERAÇÕES DENTRO DO WORKFLOW QUE NÃO SÃO INCULIDAS NO GIT
+  - INTEGRAR AS SOLUÇÕES DE CHAT E SEÇÃO 
+  - TOOLS 
+  - EXPLORAR OUTROS APLICATIVOS PARA TESTE DO CHAT
+  - MULTIPLO AGENTETES TRABALHANDO EM EQUIPE E COMPARTILHANDO RESULTADOS
+  # CHAT
+  - LIMPAR MAIS OS DADOS DE SAIDA
+  - CHAIN CONTINUA PARA CONVERSAÇÃO MAIS DINAMICA
+  # SEÇÃO
+  - 
+
 
 Arthur - 19/08/24
   Evolução:
@@ -22,10 +32,14 @@ Pedro - 20/08/24
    - Problema do GITHUB: Provavelmente corrigido
    - Tratamento dos dados do output usando o node edit fields
   AMANHA VOU COMEÇAR A FAZER A IDEIA DO CHAT
-Pedro - 20/08/24
+Pedro - 21/08/24
   Evolução:
  - Comecei a fazer o chat ( input do usuário vira task e agente responde ao input)
  - Usando chat trigger funcionou
- - Tem que ver isso ai cara 🚀: O chatInput depois de processado, é escrito no json e toda vez que o usuário faz uma nova entrada, o json é reescrito com a nova solicitação
- 
+ - Tem que ver isso ai cara 🚀: O chatInput depois de processado, é escrito no json e toda vez que o usuário faz uma nova entrada, o json é reescrito com a nova solicitaço
+Pedro - 22/08/24
+  Evolução:
+  - comecei a lidar com  os dados de saida para ter uma resposta 100% limpa
+  - A mensagem que aparece dentro do chat trigger, já está limpa, mas o problema é que retorna um json literal
+  - comecei a estudar soluções para a chain continua para deixar as respostas mais rapidas e manter um contexto
 
