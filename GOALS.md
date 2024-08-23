@@ -42,4 +42,8 @@ Pedro - 22/08/24
   - comecei a lidar com  os dados de saida para ter uma resposta 100% limpa
   - A mensagem que aparece dentro do chat trigger, já está limpa, mas o problema é que retorna um json literal
   - comecei a estudar soluções para a chain continua para deixar as respostas mais rapidas e manter um contexto
+Pedro - 23/08/24
+  Evolução:
+  - Fazer o sistema de seção dinamica junto com o contexto de conversação do agente
+    - Ajeitar o script para dar a resposta usando o o model certo e manter a chain continua 
 
