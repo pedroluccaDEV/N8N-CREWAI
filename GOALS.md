@@ -45,5 +45,9 @@ Pedro - 22/08/24
 Pedro - 23/08/24
   Evolução:
   - Fazer o sistema de seção dinamica junto com o contexto de conversação do agente
-    - Ajeitar o script para dar a resposta usando o o model certo e manter a chain continua 
+    - Ajeitar o script para dar a resposta usando o o model certo e manter a chain continua
+Pedro - 23/08/24
+  Evolução:
+-Fiquei de home então tive que configurar o ambiente e o workflow
+-problemas com as libs do python. Por algum motivo não está reconehcendo as libs
 
